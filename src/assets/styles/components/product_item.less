@@ -1,0 +1,48 @@
+.product {
+  position: relative;
+  display: block;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  overflow: hidden;
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0 0 10px 0.5px #ccc;
+  }
+
+  &:hover > .favorite {
+    opacity: 1;
+  }
+
+  .product-info {
+    text-align: center;
+  }
+
+  .favorite {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    z-index: 10;
+    transition: all 0.3s;
+    color: #ccc;
+    
+    i {
+      margin: 0;
+    }
+
+    &:hover {
+      border: 1px solid #B20000;
+      background-color: #B20000;
+      color: #fff;
+    }
+  }
+}

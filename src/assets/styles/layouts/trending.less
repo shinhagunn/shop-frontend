@@ -1,0 +1,46 @@
+.trending {
+  transition: all 0.5s;
+
+  &-container {
+    position: relative;
+    color: #fff;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+    border: 1px solid #ccc;
+
+    &:hover > .trending{
+      transform: scale(1.2);
+    }
+  }
+
+  &~.title {
+    position: absolute;
+    z-index: 999;
+    top: 120px;
+    left: 30px;
+    font-size: 20px;
+  }
+
+  &~.name {
+    position: absolute;
+    z-index: 999;
+    top: 160px;
+    left: 30px;
+    text-transform: uppercase;
+    font-size: 32px;
+    font-weight: bold;
+  }
+
+  &.trending-1 {
+    width: 100%;
+    height: 300px;
+    background: url("https://cdn.shopify.com/s/files/1/0104/6917/9492/files/gal3_770x.jpg?v=1560420819") center center;
+    background-size: cover;
+  }
+  
+  &.trending-2 {
+    width: 100%;
+    height: 300px;
+    background: url("https://cdn.shopify.com/s/files/1/0104/6917/9492/files/gal4_770x.jpg?v=1560420833") center center;
+    background-size: cover;
+  }
+}
