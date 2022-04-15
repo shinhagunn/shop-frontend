@@ -12,19 +12,56 @@ import ApiClient from '~/library/ApiClient';
 import AddToast from '~/library/Toast';
 import Input from '~/components/Input';
 import '~/assets/styles/pages/admin/product/detail.less';
+import Switch from '~/components/Switch';
 
 function ProductAddAdminPage() {
   const AdminStore = useAdminStore();
   const [description, setDescription] = useState('');
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState<any>('');
   const [name, setName] = useState('');
   const [categoryID, setCategoryID] = useState('');
   const [discount, setDiscount] = useState('');
   const [price, setPrice] = useState('');
+  const [status, setStatus] = useState(0);
 
   const navigation = useNavigate();
 
   const handleAdd = async () => {
+    if (name === '') {
+      AddToast('Error', 'Bạn phải nhập trường name', 'toast');
+      return;
+    }
+
+    if (price === '') {
+      AddToast('Error', 'Bạn phải nhập trường price', 'toast');
+      return;
+    }
+
+    if (Number.isNaN(Number(price))) {
+      AddToast('Error', 'Trường price phải là số', 'toast');
+      return;
+    }
+
+    if (discount === '') {
+      AddToast('Error', 'Bạn phải nhập trường discount', 'toast');
+      return;
+    }
+
+    if (Number.isNaN(Number(discount))) {
+      AddToast('Error', 'Trường discount phải là số', 'toast');
+      return;
+    }
+
+    if (url === '') {
+      AddToast('Error', 'Bạn phải nhập trường url', 'toast');
+      return;
+    }
+
+    if (description === '') {
+      AddToast('Error', 'Bạn phải nhập trường description', 'toast');
+      return;
+    }
+
     try {
       await new ApiClient().post('/api/v2/product/admin/product', {
         description,
@@ -33,8 +70,10 @@ function ProductAddAdminPage() {
         category_id: categoryID,
         discount: Number(discount),
         price: Number(price),
+        status,
       });
       AddToast('Success', 'Add product thành công!', 'toast');
+      navigation('/admin/products');
     } catch (error) {
       AddToast('Error', 'Add product không thành công!', 'toast');
       return error;
@@ -56,8 +95,17 @@ function ProductAddAdminPage() {
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setUrl(URL.createObjectURL(e.target.files[0]));
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setUrl(reader.result);
+      };
     }
+  };
+
+  const changeStatus = () => {
+    setStatus(status === 1 ? 0 : 1);
   };
 
   return (
@@ -114,6 +162,12 @@ function ProductAddAdminPage() {
                     </div>
                   </div>
                 </BlockItem>
+                <BlockItem col={4}>
+                  <div className="font-bold">
+                    Status
+                  </div>
+                  <Switch check={status} func={changeStatus} />
+                </BlockItem>
                 <BlockItem col={0}>
                   <div className="">
                     <p className="font-bold">Description:</p>
@@ -123,7 +177,7 @@ function ProductAddAdminPage() {
               </Block>
 
               <Block className="justify-between">
-                <Button className="btn bg-red-300 hover:bg-red-400 btn-icon p-2 text-white rounded w-42 mt-12" onClick={() => navigation('/dashboard/products')}>Return dashboard</Button>
+                <Button className="btn bg-red-300 hover:bg-red-400 btn-icon p-2 text-white rounded w-42 mt-12" onClick={() => navigation('/admin/products')}>Return dashboard</Button>
                 <Button className="btn bg-indigo-400 hover:bg-indigo-500 btn-icon p-2 text-white rounded w-28 mt-12" onClick={() => handleAdd()}>Add</Button>
               </Block>
             </div>

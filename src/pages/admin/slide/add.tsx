@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Block from '~/components/Block';
 import BlockAdmin from '~/components/BlockAdmin';
 import BlockItem from '~/components/BlockItem';
@@ -8,59 +8,57 @@ import Select from '~/components/Select';
 import Button from '~/components/Button';
 import LayoutAdmin from '~/layouts/LayoutAdmin';
 import useAdminStore from '~/stores/admin';
-import { changeISOTimeToMyFormTime, CurrencyHTML } from '~/mixins/helper';
 import ApiClient from '~/library/ApiClient';
 import AddToast from '~/library/Toast';
 import Input from '~/components/Input';
 import '~/assets/styles/pages/admin/product/detail.less';
 
-function SlideDetailAdminPage() {
+function SlideAddAdminPage() {
   const AdminStore = useAdminStore();
   const [description, setDescription] = useState('');
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState<any>('');
   const [title, setTitle] = useState('');
 
-  const { id } = useParams();
+  const navigation = useNavigate();
 
-  const handleUpdate = async () => {
+  const handleAdd = async () => {
+    if (title === '') {
+      AddToast('Error', 'Bạn phải nhập trường title', 'toast');
+      return;
+    }
+
+    if (url === '') {
+      AddToast('Error', 'Bạn phải upload file ảnh', 'toast');
+      return;
+    }
+
+    if (description === '') {
+      AddToast('Error', 'Bạn phải nhập trường description', 'toast');
+      return;
+    }
+
     try {
-      await new ApiClient().patch(`/api/v2/product/admin/slide/${id}`, {
+      await new ApiClient().post('/api/v2/product/admin/slide', {
         description,
         image: url,
         title,
       });
-      AddToast('Success', 'Update slide thành công!', 'toast');
+      AddToast('Success', 'Add slide thành công!', 'toast');
+      navigation('/admin/slides');
     } catch (error) {
-      AddToast('Error', 'Update slide không thành công!', 'toast');
+      AddToast('Error', 'Add slide không thành công!', 'toast');
       return error;
     }
   };
-
-  const handleRemove = async () => {
-    try {
-      await new ApiClient().delete(`/api/v2/product/admin/slide/${id}`);
-      AddToast('Success', 'Remove slide thành công!', 'toast');
-    } catch (error) {
-      AddToast('Error', 'Remove slide không thành công!', 'toast');
-      return error;
-    }
-  };
-
-  useEffect(() => {
-    if (id) {
-      AdminStore.fetchSlideByID(id).then((result) => {
-        if (result) {
-          setUrl(result.image);
-          setDescription(result.description);
-          setTitle(result.title);
-        }
-      });
-    }
-  }, []);
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setUrl(URL.createObjectURL(e.target.files[0]));
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setUrl(reader.result);
+      };
     }
   };
 
@@ -68,27 +66,16 @@ function SlideDetailAdminPage() {
     <div>
       <LayoutAdmin selected={5} pageName="Slides">
         <div className="main">
-          <BlockAdmin className="users" blockName="Slide Detail">
+          <BlockAdmin className="slides" blockName="Slide Add">
             <div>
-              <Block className="items-center">
-                <BlockItem col={2}>
-                  <div className="text-2xl">
-                    <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} title="Click here to change" />
-                  </div>
-                  <div>
-                    <p>{`Last updated: ${AdminStore.slide?.updated_at ? changeISOTimeToMyFormTime(AdminStore.slide.updated_at) : ''}`}</p>
-                  </div>
-                </BlockItem>
+              <Block>
                 <BlockItem col={2}>
                   <div className="">
-                    <p className="font-bold">Created At:</p>
-                    {AdminStore.slide?.updated_at ? changeISOTimeToMyFormTime(AdminStore.slide.created_at) : ''}
+                    <p className="font-bold">Title:</p>
+                    <Input className="w-96 mt-4 border-color p-1 pl-2 focus:outline-none rounded" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
                   </div>
                 </BlockItem>
-              </Block>
-
-              <Block>
-                <BlockItem col={4}>
+                <BlockItem col={2}>
                   <div className="">
                     <p className="font-bold">Image:</p>
                     <label id="imagePre" htmlFor="upFile">
@@ -102,6 +89,9 @@ function SlideDetailAdminPage() {
                     </div>
                   </div>
                 </BlockItem>
+              </Block>
+
+              <Block>
                 <BlockItem col={0}>
                   <div className="">
                     <p className="font-bold">Description:</p>
@@ -111,8 +101,8 @@ function SlideDetailAdminPage() {
               </Block>
 
               <Block className="justify-between">
-                <Button className="btn bg-red-300 hover:bg-red-400 btn-icon p-2 text-white rounded w-28 mt-12" onClick={() => handleRemove()}>Remove</Button>
-                <Button className="btn bg-indigo-400 hover:bg-indigo-500 btn-icon p-2 text-white rounded w-28 mt-12" onClick={() => handleUpdate()}>Update</Button>
+                <Button className="btn bg-red-300 hover:bg-red-400 btn-icon p-2 text-white rounded w-42 mt-12" onClick={() => navigation('/admin/slides')}>Return dashboard</Button>
+                <Button className="btn bg-indigo-400 hover:bg-indigo-500 btn-icon p-2 text-white rounded w-28 mt-12" onClick={() => handleAdd()}>Add</Button>
               </Block>
             </div>
           </BlockAdmin>
@@ -122,4 +112,4 @@ function SlideDetailAdminPage() {
   );
 }
 
-export default SlideDetailAdminPage;
+export default SlideAddAdminPage;

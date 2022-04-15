@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '~/assets/styles/pages/admin/product/index.less';
 import BlockAdmin from '~/components/BlockAdmin';
+import Switch from '~/components/Switch';
 import Table from '~/components/Table';
 import LayoutAdmin from '~/layouts/LayoutAdmin';
 import useAdminStore from '~/stores/admin';
@@ -9,10 +10,15 @@ import { Align, Column, Product } from '~/types/index';
 
 function Dashboard() {
   const AdminStore = useAdminStore();
+  const [status, setStatus] = useState(0);
 
   useEffect(() => {
     AdminStore.fetchProducts('');
   }, []);
+
+  const changeStatus = () => {
+    setStatus(status === 1 ? 0 : 1);
+  };
 
   const columns = [
     {
@@ -63,8 +69,8 @@ function Dashboard() {
     <LayoutAdmin selected={4} pageName="Products">
       <div className="main">
         <BlockAdmin className="products" blockName="Table Products">
-          <Link to="/dashboard/products/add" className="btn bg-indigo-400 hover:bg-indigo-500 btn-icon p-3 my-2 inline-block text-white rounded w-28">Add product</Link>
-          <Table is_router_link router_builder="/dashboard/products" data={AdminStore.products} columns={columns} scopedSlotsRenderFunc={(item: Product, column) => scopedSlotsRenderFunc(item, column)} />
+          <Link to="/admin/products/add" className="btn bg-indigo-400 hover:bg-indigo-500 btn-icon p-3 my-2 inline-block text-white rounded w-28">Add product</Link>
+          <Table is_router_link router_builder="/admin/products" data={AdminStore.products} columns={columns} scopedSlotsRenderFunc={(item: Product, column) => scopedSlotsRenderFunc(item, column)} />
         </BlockAdmin>
       </div>
     </LayoutAdmin>

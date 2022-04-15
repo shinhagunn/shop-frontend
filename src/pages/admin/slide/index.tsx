@@ -63,8 +63,8 @@ function SlideAdminPage() {
     <LayoutAdmin selected={5} pageName="Slides">
       <div className="main">
         <BlockAdmin className="slides" blockName="Table Slides">
-          <Link to="/dashboard/slides/add" className="btn bg-indigo-400 hover:bg-indigo-500 btn-icon p-3 my-2 inline-block text-white rounded w-22">Add slide</Link>
-          <Table is_router_link router_builder="/dashboard/slides" data={AdminStore.slides} columns={columns} scopedSlotsRenderFunc={(item: Slide, column) => scopedSlotsRenderFunc(item, column)} />
+          <Link to="/admin/slides/add" className="btn bg-indigo-400 hover:bg-indigo-500 btn-icon p-3 my-2 inline-block text-white rounded w-22">Add slide</Link>
+          <Table is_router_link router_builder="/admin/slides" data={AdminStore.slides} columns={columns} scopedSlotsRenderFunc={(item: Slide, column) => scopedSlotsRenderFunc(item, column)} />
         </BlockAdmin>
       </div>
     </LayoutAdmin>

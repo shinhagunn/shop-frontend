@@ -19,6 +19,8 @@ function UserDetailAdminPage() {
 
   const { uid } = useParams();
 
+  const navigation = useNavigate();
+
   const handleUpdate = async () => {
     try {
       await new ApiClient().patch(`/api/v2/myauth/admin/user/${uid}`, {
@@ -26,6 +28,7 @@ function UserDetailAdminPage() {
         role,
       });
       AddToast('Success', 'Update user thành công!', 'toast');
+      navigation('/admin/users');
     } catch (error) {
       AddToast('Error', 'Update user không thành công!', 'toast');
       return error;

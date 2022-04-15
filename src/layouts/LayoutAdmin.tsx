@@ -50,7 +50,7 @@ function LayoutAdmin(props: React.PropsWithChildren<LayoutAdminProps>) {
       } else {
         result[i] = {
           id: i,
-          name: 'Dashboard / ',
+          name: 'Admin / ',
           url: tam[i],
         };
       }
@@ -79,25 +79,25 @@ function LayoutAdmin(props: React.PropsWithChildren<LayoutAdminProps>) {
         </h2>
         <ul className="menu-list">
           <li className={`item ${props.selected === 2 ? 'item-selected' : ''}`}>
-            <Link to="/dashboard/users">
+            <Link to="/admin/users">
               <i className="fas fa-user" />
               Users
             </Link>
           </li>
           <li className={`item ${props.selected === 3 ? 'item-selected' : ''}`}>
-            <Link to="/dashboard/categories">
+            <Link to="/admin/categories">
               <i className="fa-solid fa-list" />
               Categories
             </Link>
           </li>
           <li className={`item ${props.selected === 4 ? 'item-selected' : ''}`}>
-            <Link to="/dashboard/products">
+            <Link to="/admin/products">
               <i className="fa-solid fa-vest-patches" />
               Products
             </Link>
           </li>
           <li className={`item ${props.selected === 5 ? 'item-selected' : ''}`}>
-            <Link to="/dashboard/slides">
+            <Link to="/admin/slides">
               <i className="fa-solid fa-comment" />
               Slides
             </Link>

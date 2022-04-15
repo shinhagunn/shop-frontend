@@ -13,19 +13,58 @@ import ApiClient from '~/library/ApiClient';
 import AddToast from '~/library/Toast';
 import Input from '~/components/Input';
 import '~/assets/styles/pages/admin/product/detail.less';
+import Switch from '~/components/Switch';
 
 function ProductDetailAdminPage() {
   const AdminStore = useAdminStore();
   const [description, setDescription] = useState('');
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState<any>('');
   const [name, setName] = useState('');
   const [categoryID, setCategoryID] = useState('');
   const [discount, setDiscount] = useState('');
   const [price, setPrice] = useState('');
+  const [status, setStatus] = useState(0);
 
   const { id } = useParams();
 
+  const navigation = useNavigate();
+
   const handleUpdate = async () => {
+    if (name === '') {
+      AddToast('Error', 'Bạn phải nhập trường name', 'toast');
+      return;
+    }
+
+    if (price === '') {
+      AddToast('Error', 'Bạn phải nhập trường price', 'toast');
+      return;
+    }
+
+    if (Number.isNaN(Number(price))) {
+      AddToast('Error', 'Trường price phải là số', 'toast');
+      return;
+    }
+
+    if (discount === '') {
+      AddToast('Error', 'Bạn phải nhập trường discount', 'toast');
+      return;
+    }
+
+    if (Number.isNaN(Number(discount))) {
+      AddToast('Error', 'Trường discount phải là số', 'toast');
+      return;
+    }
+
+    if (url === '') {
+      AddToast('Error', 'Bạn phải nhập trường url', 'toast');
+      return;
+    }
+
+    if (description === '') {
+      AddToast('Error', 'Bạn phải nhập trường description', 'toast');
+      return;
+    }
+
     try {
       await new ApiClient().patch(`/api/v2/product/admin/product/${id}`, {
         description,
@@ -34,8 +73,10 @@ function ProductDetailAdminPage() {
         category_id: categoryID,
         discount: Number(discount),
         price: Number(price),
+        status,
       });
       AddToast('Success', 'Update product thành công!', 'toast');
+      navigation('/admin/products');
     } catch (error) {
       AddToast('Error', 'Update product không thành công!', 'toast');
       return error;
@@ -44,8 +85,13 @@ function ProductDetailAdminPage() {
 
   const handleRemove = async () => {
     try {
-      await new ApiClient().delete(`/api/v2/product/admin/product/${id}`);
-      AddToast('Success', 'Remove product thành công!', 'toast');
+      // eslint-disable-next-line no-restricted-globals
+      const x = confirm('Bạn chắc chắn muốn xóa ?');
+      if (x) {
+        await new ApiClient().delete(`/api/v2/product/admin/product/${id}`);
+        AddToast('Success', 'Remove product thành công!', 'toast');
+        navigation('/admin/products');
+      }
     } catch (error) {
       AddToast('Error', 'Remove product không thành công!', 'toast');
       return error;
@@ -68,6 +114,7 @@ function ProductDetailAdminPage() {
           setName(result.name);
           setDiscount(`${result.discount}`);
           setPrice(`${result.price}`);
+          setStatus(result.status);
         }
       });
     }
@@ -75,8 +122,17 @@ function ProductDetailAdminPage() {
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setUrl(URL.createObjectURL(e.target.files[0]));
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setUrl(reader.result);
+      };
     }
+  };
+
+  const changeStatus = () => {
+    setStatus(status === 1 ? 0 : 1);
   };
 
   return (
@@ -150,6 +206,12 @@ function ProductDetailAdminPage() {
                       <Input id="upFile" type="file" onChange={(e) => onFileChange(e)} />
                     </div>
                   </div>
+                </BlockItem>
+                <BlockItem col={4}>
+                  <div className="font-bold">
+                    Status
+                  </div>
+                  <Switch check={status} func={changeStatus} />
                 </BlockItem>
                 <BlockItem col={0}>
                   <div className="">

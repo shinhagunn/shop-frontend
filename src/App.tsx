@@ -14,22 +14,23 @@ import FavoriteProductPage from '~/pages/FavoriteProduct';
 import SearchPage from '~/pages/Search';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
-import ProductAdminPage from './pages/dashboard/product';
-import CategoryAdminPage from './pages/dashboard/category';
-import SlideAdminPage from './pages/dashboard/slide';
-import UserAdminPage from './pages/dashboard/user';
+import ProductAdminPage from './pages/admin/product';
+import CategoryAdminPage from './pages/admin/category';
+import SlideAdminPage from './pages/admin/slide';
+import UserAdminPage from './pages/admin/user';
 import UserPage from '~/pages/user/index';
 import UserPasswordPage from '~/pages/user/Password';
 import UserCartPage from '~/pages/user/Cart';
 import UserOrderPage from '~/pages/user/Order';
 import ChatPage from '~/pages/user/Chat';
 import UserOrderDetailPage from '~/pages/user/OrderDetail';
-import ProductDetailAdminPage from '~/pages/dashboard/product/detail';
-import SlideDetailAdminPage from '~/pages/dashboard/slide/detail';
-import ProductAddAdminPage from '~/pages/dashboard/product/add';
-import SlideAddAdminPage from '~/pages/dashboard/slide/add';
-import UserDetailAdminPage from '~/pages/dashboard/user/detail';
+import ProductDetailAdminPage from '~/pages/admin/product/detail';
+import SlideDetailAdminPage from '~/pages/admin/slide/detail';
+import ProductAddAdminPage from '~/pages/admin/product/add';
+import SlideAddAdminPage from '~/pages/admin/slide/add';
+import UserDetailAdminPage from '~/pages/admin/user/detail';
 import ToastContainer from './components/Toast';
+import AdminPage from '~/pages/admin';
 
 function App() {
   return (
@@ -48,7 +49,8 @@ function App() {
         <Route path="/dang-ky" element={<RegisterPage />} />
         <Route path="/lien-he" element={<ContactPage />} />
         <Route path="/products/favorite" element={<FavoriteProductPage />} />
-        <Route path="/dashboard">
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin">
           <Route path="products" element={<ProductAdminPage />} />
           <Route path="categories" element={<CategoryAdminPage />} />
           <Route path="slides" element={<SlideAdminPage />} />

@@ -52,6 +52,11 @@ function CategoryAdminPage() {
   ];
 
   const handleAdd = async () => {
+    if (name === '') {
+      AddToast('Error', 'Bạn phải nhập trường name', 'toast');
+      return;
+    }
+
     try {
       await new ApiClient().post('/api/v2/product/admin/category', {
         name,
@@ -59,6 +64,7 @@ function CategoryAdminPage() {
       AddToast('Success', 'Add category thành công', 'toast');
       AdminStore.fetchCategories();
     } catch (error) {
+      AddToast('Error', 'Add category không thành công', 'toast');
       return error;
     }
   };
@@ -70,7 +76,7 @@ function CategoryAdminPage() {
           <Block className="justify-between p-3 items-center">
             <div>
               Name:
-              <Input type="text" className="ml-2 focus:outline-none border-color pl-2 py-1 w-80" placeholder="Name ..." onChange={(e) => setName(e.target.value)} />
+              <Input type="text" className="ml-2 focus:outline-none border-color pl-2 py-1 w-80" value={name} placeholder="Name ..." onChange={(e) => setName(e.target.value)} />
             </div>
             <div>
               <Button className="btn bg-indigo-400 hover:bg-indigo-500 btn-icon p-1 text-white rounded w-28" onClick={() => handleAdd()}>Add</Button>

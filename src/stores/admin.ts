@@ -47,7 +47,7 @@ const useAdminStore = create<AdminStore>((set, get) => ({
 
   fetchProducts: async (query: string) => {
     try {
-      const { data: products } = await new ApiClient().get(`/api/v2/product/public/products?${query}`);
+      const { data: products } = await new ApiClient().get(`/api/v2/product/admin/products?${query}`);
 
       set({
         ...get(),

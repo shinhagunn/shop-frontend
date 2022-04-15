@@ -15,6 +15,7 @@ export type Product = {
   discount: number
   description: string
   image: string
+  status: number
   created_at: string
   updated_at: string
 }

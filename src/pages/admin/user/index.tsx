@@ -54,7 +54,7 @@ function UserAdminPage() {
       <LayoutAdmin selected={2} pageName="Users">
         <div className="main">
           <BlockAdmin className="users" blockName="Table Users">
-            <Table data={AdminStore.users} columns={columns} is_router_link router_builder="/dashboard/users" />
+            <Table data={AdminStore.users} columns={columns} is_router_link router_builder="/admin/users" />
           </BlockAdmin>
         </div>
       </LayoutAdmin>

@@ -45,7 +45,7 @@ function Header(props: HeaderProps) {
           {userStore.user ? (
             <div>
               {userStore.user.role === 'Admin' ? (
-                <Link to="/dashboard/users" className="text-hover text-sm mr-4">Admin</Link>
+                <Link to="/admin" className="text-hover text-sm mr-4">Admin</Link>
               ) : '' }
               <Link to="/user" className="text-hover text-sm mr-4">
                 Xin chào,
